@@ -4,7 +4,7 @@
 
 
 
-###Usage:
+### Usage:
 
 ```
 $ docker build -t moxtra2jira . 
