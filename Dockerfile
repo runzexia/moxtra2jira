@@ -4,4 +4,5 @@ RUN pip install requests python-dateutil tornado lepl && \
 COPY ./* ./app/
 WORKDIR /app/
 EXPOSE 8080
-ENTRYPOINT python web_server.py
+ENTRYPOINT [ "python", "./web_server.py" ]
+
