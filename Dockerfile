@@ -1,7 +1,7 @@
 FROM python:3.5.4
-RUN pip install requests python-dateutil tornado && \
+RUN pip install requests python-dateutil tornado lepl && \
     mkdir app
 COPY ./* ./app/
 WORKDIR /app/
 EXPOSE 8080
-CMD python web_server.py
+ENTRYPOINT python web_server.py

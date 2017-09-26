@@ -6,9 +6,10 @@ import tornado.web
 from datetime import datetime
 from dateutil import tz
 from logging.config import fileConfig
-
+import sys
+from lepl.apps.rfc3696 import HttpUrl
 fileConfig('logging_config.ini')
-BaseJiraAddress = 'http://jira.daocom.io'
+BaseJiraAddress = ''
 LOG = logging.getLogger()
 
 
@@ -45,5 +46,13 @@ class MyDumpHandler(tornado.web.RequestHandler):
 
 
 if __name__ == "__main__":
+    valid_http_url = HttpUrl()
+    if len(sys.argv)<2:
+        LOG.error("please enter JIRA address")
+        sys.exit(1)
+    elif not valid_http_url(sys.argv[1]):
+        LOG.error("invalid JIRA address")
+        sys.exit(1)
+    BaseJiraAddress = sys.argv[1]
     tornado.web.Application([(r"/.*", MyDumpHandler), ]).listen(8080)
     tornado.ioloop.IOLoop.instance().start()

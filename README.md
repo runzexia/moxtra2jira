@@ -8,7 +8,7 @@
 
 ```
 $ docker build -t moxtra2jira . 
-$ docker run -dit -p 8080:8080 moxtra2jira
+$ docker run -dit -p 8080:8080 moxtra2jira $JIRA_ADDRESS
 ```
 
 
