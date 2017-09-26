@@ -6,7 +6,6 @@ import tornado.web
 from datetime import datetime
 from dateutil import tz
 from logging.config import fileConfig
-import http
 
 fileConfig('logging_config.ini')
 BaseJiraAddress = 'http://jira.daocom.io'
@@ -21,9 +20,7 @@ class MyDumpHandler(tornado.web.RequestHandler):
         post_dict['event']['timestamp'] = self._convert_timezone(post_dict['event']['timestamp'])
         jira_dict = {'data': post_dict}
         request = BaseJiraAddress + self.request.uri
-        self.set_status(http.HTTPStatus.OK)
         self._execute_px_post_request(jira_dict, request)
-        self.finish()
 
     def _convert_timezone(self, time):
         from_zone = tz.gettz('UTC')
@@ -39,9 +36,11 @@ class MyDumpHandler(tornado.web.RequestHandler):
             request,
             data=json.dumps(params), headers=headers)
         LOG.info("get response %s", r)
-        if r.status_code != http.HTTPStatus.OK:
+        if r.status_code != requests.codes.ok:
             LOG.error("request jira error %s", r)
-            self.set_status(r.status_code,r)
+            self.write_error(r.status_code, r)
+        else:
+            self.write(dict())
         r.close()
 
 
